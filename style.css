@@ -1,0 +1,16 @@
+/* Use the Inter font family */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Simple animation for the loading spinner */
+@keyframes spin {
+    to { 
+        transform: rotate(360deg); 
+    }
+}
+
+.spinner {
+    border-top-color: #3498db;
+    animation: spin 1s linear infinite;
+}
