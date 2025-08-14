@@ -3,6 +3,13 @@
 const userContainer = document.getElementById('user-container');
 const reloadButton = document.getElementById('reload-button');
 const statusContainer = document.getElementById('status-container');
+const searchInput = document.getElementById('search-input');
+
+// Create scroll to top button
+const scrollToTopBtn = document.createElement('div');
+scrollToTopBtn.className = 'scroll-to-top';
+scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+document.body.appendChild(scrollToTopBtn);
 
 // --- API Endpoint ---
 const apiUrl = 'https://jsonplaceholder.typicode.com/users';
@@ -92,11 +99,57 @@ async function fetchAndDisplayUsers() {
     }
 }
 
+// Filter users based on search input
+function filterUsers() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const userCards = userContainer.children;
+
+    Array.from(userCards).forEach(card => {
+        const name = card.querySelector('h2').textContent.toLowerCase();
+        const email = card.querySelector('p').textContent.toLowerCase();
+        const address = card.querySelector('div p').textContent.toLowerCase();
+
+        if (name.includes(searchTerm) || email.includes(searchTerm) || address.includes(searchTerm)) {
+            card.style.display = '';
+            // Add a subtle highlight animation
+            card.style.animation = 'highlightSearch 1s ease';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Handle scroll to top functionality
+function handleScroll() {
+    if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('visible');
+    } else {
+        scrollToTopBtn.classList.remove('visible');
+    }
+}
+
+// Smooth scroll to top
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
 // --- Event Listeners ---
 
 // Add a click event listener to the reload button.
 // When clicked, it will call the fetchAndDisplayUsers function again.
 reloadButton.addEventListener('click', fetchAndDisplayUsers);
+
+// Add search functionality
+searchInput.addEventListener('input', filterUsers);
+
+// Add scroll event listener
+window.addEventListener('scroll', handleScroll);
+
+// Add click event listener to scroll to top button
+scrollToTopBtn.addEventListener('click', scrollToTop);
 
 // --- Initial Load ---
 
